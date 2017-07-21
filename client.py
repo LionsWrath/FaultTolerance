@@ -61,12 +61,30 @@ def deleteValue(server):
 
     server.delete(int(idx), value)
 
+    return True
+
 def insertValue(server):
     print "\n" + "="*30 + "\n"
     idx = raw_input("\t> Digite o indice da database: ")
     value = raw_input("\t> Digite o elemento: ")
 
     server.insert(int(idx), value)
+
+    return True
+
+def propagateValue(server):
+    print "\n" + "="*30 + "\n"
+    value = raw_input("\t> Digite o elemento: ")
+
+    server.propagate(value)
+
+    return True
+
+def broadcastValue(server):
+    print "\n" + "="*30 + "\n"
+    value = raw_input("\t> Digite o elemento: ")
+
+    server.broadcast(value)
 
     return True
 
@@ -98,6 +116,10 @@ with Pyro4.locateNS() as ns:
                 "Retornar valor por índice",
                 "Deletar valor por conteúdo",
                 "Inserir valor em database",
+                
+                #Complex ones
+                "Propagar valor",
+                "Broadcast de valor",
 
                 "Sair"
         ]
@@ -116,5 +138,7 @@ with Pyro4.locateNS() as ns:
                 "5" : getAll,
                 "6" : getValue,
                 "7" : deleteValue,
-                "8" : insertValue
+                "8" : insertValue,
+                "9" : propagateValue,
+                "10": broadcastValue
                 }.get(c, dummy)(server)

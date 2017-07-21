@@ -11,6 +11,11 @@ class Server(object):
         self.name = name
 
     def accessDatabase(self, db):
+        if db in self.accessed:
+            print "\t> Server({0}) already accessed".format(
+                    db.getID())
+            return
+
         self.accessed.append(db)
 
         print "\t> Server ({0}) accessed database ({1})".format(
@@ -57,6 +62,34 @@ class Server(object):
             print "\t\t> Item inserted in database ({0}): {1}".format(
                     self.accessed[idx].getID(),
                     item)
+
+    def propagate(self, item):
+        print "\t\t> Begin propagating. . ."
+
+        databases = self.accessed[:]
+        while True:
+            if not databases:
+                print "\t\t> No database connected, can't propagate"
+                break
+
+            first = databases[0]
+            databases.remove(first)
+            try:
+                first.propagate(databases, item)
+                print "\t\t> Propagated to {0}".format(first.getID())
+                break
+            except:
+                print "\t\t> Error propagating."
+
+    def broadcast(self, item):
+        print "\t\t> Broadcasting {0} to all connected databases!".format(item)
+        
+        for db in self.accessed:
+            try:
+                print "\t\t\t> Database {0}. . .".format(db.getID())
+                db.add(item)
+            except:
+                print "Could't reach database."
 
 def main():
 

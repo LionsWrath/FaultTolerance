@@ -11,6 +11,7 @@ class Database(object):
         return self
 
     def getID(self):
+        print "> Returning ID. . ."
         return self.id
 
     def list(self):
@@ -36,6 +37,27 @@ class Database(object):
         self.data.append(item)
 
         return True
+
+    def propagate(self, databases, item):
+        self.add(item)
+
+        while True:
+            if not databases:
+                print "> Propagation ended!"
+                break
+            else:
+                next = databases[0]
+                try:
+                    databases.remove(next)
+                    print "> Propagating from {0} to {1}".format(
+                            self.id,
+                            next.getID())
+
+                    next.propagate(databases, item)
+                    break
+                except:
+                    print "> Error propagating from {0}".format(
+                                self.id)
 
 def main():
     name = raw_input('Name of this database: ')
