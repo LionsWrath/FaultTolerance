@@ -31,8 +31,6 @@ def leaveDatabase(server):
     return True
 
 def listDatabases(server):
-    print "\n" + "="*30 + "\n"
-    
     server.listDatabases()
 
     return True
@@ -88,6 +86,23 @@ def broadcastValue(server):
 
     return True
 
+def ping(server):
+    print "\n" + "="*30 + "\n"
+
+    option = ''
+    while option != "y" and option != "n":
+        option = raw_input(
+                "\t> Deseja deletar conexões falhas?(y/n) ")
+
+    delete = False
+    if option == "y":
+        delete = True
+
+    server.ping(delete)
+
+    return True
+
+
 with Pyro4.locateNS() as ns:
     db_1 = Pyro4.Proxy(ns.lookup("one.db"))
     db_2 = Pyro4.Proxy(ns.lookup("two.db"))
@@ -120,6 +135,7 @@ with Pyro4.locateNS() as ns:
                 #Complex ones
                 "Propagar valor",
                 "Broadcast de valor",
+                "Ping",
 
                 "Sair"
         ]
@@ -140,5 +156,10 @@ with Pyro4.locateNS() as ns:
                 "7" : deleteValue,
                 "8" : insertValue,
                 "9" : propagateValue,
-                "10": broadcastValue
+                "10": broadcastValue,
+                "11": ping
                 }.get(c, dummy)(server)
+    
+    server.disconnectAll()
+
+    print "Finalizando cliente. . ."

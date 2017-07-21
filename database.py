@@ -9,6 +9,10 @@ class Database(object):
         self.id = id
 
         return self
+    
+    def ping(self):
+        print "> Returning ping. . ."
+        return True
 
     def getID(self):
         print "> Returning ID. . ."
@@ -19,16 +23,24 @@ class Database(object):
         return self.data
 
     def get(self, index):
-        print "> Returning data. . . {0}".format(self.data[index])
 
-        item = self.data[index]
+        try:
+            item = self.data[index]
+            print "> Returning data. . . {0}".format(item)
+        except:
+            print "> Error: Item not found!"
+            return False
 
         return item
 
     def remove(self, item):
         print "> Removing data. . . {0}".format(item)
-
-        self.data.remove(item)
+    
+        try:
+            self.data.remove(item)
+        except:
+            print "> Error: Item not found!"
+            return False
 
         return True
 
